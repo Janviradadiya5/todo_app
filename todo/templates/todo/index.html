@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My To-Do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6d365, #fda085);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 50px 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 35px;
+            border-radius: 15px;
+            width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 30px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #fda085;
+            box-shadow: 0 0 5px rgba(253, 160, 133, 0.5);
+        }
+
+        button {
+            background-color: #28a745;
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            background: #fdfdfd;
+            margin-bottom: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 5px solid #fda085;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            animation: fadeInTask 0.5s ease;
+        }
+
+        @keyframes fadeInTask {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .task-title {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .actions a {
+            margin-left: 12px;
+            font-size: 16px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .actions a:hover {
+            transform: scale(1.2);
+        }
+
+        .actions .delete {
+            color: #d9534f;
+        }
+
+        .actions .complete {
+            color: #0275d8;
+        }
+
+        .task-title i {
+            margin-right: 8px;
+            color: #fda085;
+        }
+
+        .no-tasks {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+            margin-top: 20px;
+            animation: fadeIn 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <body>
+    <div class="container">
+
+<div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    {% if user.is_authenticated %}
+       <a href="{% url 'admin:index' %}" style="
+    margin-right: 12px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #6f42c1;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: 0.3s;
+    font-size: 14px;
+    line-height: 1.5;
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+">
+    <i class="fa fa-user-shield" style="margin-right: 6px;"></i> Admin
+</a>
+
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin-left: 12px;">
+            {% csrf_token %}
+            <button type="submit" style="
+                background-color: #dc3545;
+                color: #fff;
+                padding: 8px 14px;
+                border-radius: 6px;
+                font-weight: bold;
+                transition: 0.3s;
+                border: none;
+                cursor: pointer;
+                text-decoration: none;
+                font-family: inherit;
+                font-size: 14px;
+            ">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}" style="margin-right: 12px; text-decoration: none; color: #fff; background-color: #007bff; padding: 8px 14px; border-radius: 6px; font-weight: bold; transition: 0.3s;">
+            <i class="fa fa-sign-in-alt"></i> Login
+        </a>
+        <a href="{% url 'register' %}" style="text-decoration: none; color: #fff; background-color: #17a2b8; padding: 8px 14px; border-radius: 6px; font-weight: bold; transition: 0.3s;">
+            <i class="fa fa-user-plus"></i> Register
+        </a>
+    {% endif %}
+</div>
+
+        <h1>📝 My To-Do List</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.title }}
+            <button type="submit"><i class="fa fa-plus"></i> Add</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <span class="task-title {% if task.completed %}completed{% endif %}">
+                        <i class="fa {% if task.completed %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
+                        {{ task.title }}
+                    </span>
+                    <span class="actions">
+                        {% if not task.completed %}
+                            <a href="{% url 'complete_task' task.id %}" class="complete" title="Mark Complete">
+                                <i class="fa fa-check"></i>
+                            </a>
+                            <a href="{% url 'edit_task' task.id %}" class="edit" title="Edit Task">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'delete_task' task.id %}" class="delete" title="Delete Task">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </span>
+                </li>
+            {% empty %}
+                <li class="no-tasks">No tasks yet. Start by adding one! 🚀</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+            
+          
+        </form>
+
+      
+    
+</body>
+</html>
